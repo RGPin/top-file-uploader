@@ -8,6 +8,7 @@ const pool = require("./db/pool");
 
 const app = express();
 const authRouter = require("./routes/authRouter");
+const userRouter = require("./routes/userRouter");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(
 app.use(passport.session());
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, (error) => {
