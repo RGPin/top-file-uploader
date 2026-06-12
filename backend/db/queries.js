@@ -45,7 +45,34 @@ const createUser = async (username, email, hashedPassword) => {
   }
 };
 
+/**
+ * Store metadata of uploaded file
+ * @param {string} id
+ * @param {string} path
+ * @param {string} originalname
+ * @param {string} mimetype
+ * @param {number} size
+ * @returns {Promise<Object|null>}
+ */
+const saveMetadata = async (id, path, originalname, mimetype, size) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      INSERT INTO uploaded_files (user_id, storage_path, original_name, mime_type, file_size)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+      `,
+      [id, path, originalname, mimetype, size],
+    );
+    return rows[0] || null;
+  } catch (error) {
+    console.error("saveMetadata failed: ", { error });
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
+  saveMetadata,
 };

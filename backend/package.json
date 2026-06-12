@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/RGPin/top-file-uploader#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.108.1",
     "bcryptjs": "^3.0.3",
     "connect-pg-simple": "^10.0.0",
     "ejs": "^6.0.1",

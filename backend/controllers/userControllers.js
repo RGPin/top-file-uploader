@@ -1,3 +1,6 @@
+const { supabase } = require("../config/supabase");
+const db = require("../db/queries");
+
 const getUserProfile = (req, res) => {
   try {
     res.status(200).json({ user: req.user });
@@ -7,14 +10,40 @@ const getUserProfile = (req, res) => {
   }
 };
 
-const uploadFile = (req, res) => {
+const uploadFile = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    res
-      .status(200)
-      .json({ fileName: req.file.originalname, message: "File uploaded" });
+
+    const { data, error } = await supabase.storage
+      .from("uploads")
+      .upload(
+        `user_${req.user.id}/${Date.now()}-${req.file.originalname}`,
+        req.file.buffer,
+        { contentType: req.file.mimetype },
+      );
+
+    if (error) throw error;
+
+    const uploaded = db.saveMetadata(
+      req.user.id,
+      data.path,
+      req.file.originalname,
+      req.file.mimetype,
+      req.file.size,
+    );
+
+    if (!uploaded) {
+      console.error("saveMetadata failed");
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+    res.status(200).json({
+      fileName: req.file.originalname,
+      message: "File uploaded",
+      data: data,
+    });
   } catch (error) {
     console.error("uploadFile failed: ", { error });
     res.status(500).json({ message: "Internal server error" });
