@@ -61,22 +61,10 @@ const getUploadedFiles = async (req, res) => {
       });
     }
 
-    const filePaths = files.map((file) => file.storage_path);
-
-    const { data, error } = await supabase.storage
-      .from("uploads")
-      .createSignedUrls(filePaths, 6000000);
-
-    if (error) throw error;
-
-    const userFiles = data.map((supabaseFile, i) => {
-      const originalFile = files[i];
-
+    const userFiles = files.map((file) => {
       return {
-        ...originalFile,
-        signedUrl: supabaseFile.signedUrl,
-        signedURL: supabaseFile.signedURL,
-        error: supabaseFile.error,
+        ...file,
+        url: `https://ftzvjmstzwdvacsyxnat.supabase.co/storage/v1/object/public/uploads/${file.storage_path}`,
       };
     });
 
