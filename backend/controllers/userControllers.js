@@ -50,7 +50,48 @@ const uploadFile = async (req, res) => {
   }
 };
 
+const getUploadedFiles = async (req, res) => {
+  try {
+    const files = await db.getUserFiles(req.user.id);
+
+    if (!files || files.length === 0) {
+      return res.status(200).json({
+        message: "success",
+        userFiles: [],
+      });
+    }
+
+    const filePaths = files.map((file) => file.storage_path);
+
+    const { data, error } = await supabase.storage
+      .from("uploads")
+      .createSignedUrls(filePaths, 6000000);
+
+    if (error) throw error;
+
+    const userFiles = data.map((supabaseFile, i) => {
+      const originalFile = files[i];
+
+      return {
+        ...originalFile,
+        signedUrl: supabaseFile.signedUrl,
+        signedURL: supabaseFile.signedURL,
+        error: supabaseFile.error,
+      };
+    });
+
+    res.status(200).json({
+      message: "success",
+      userFiles,
+    });
+  } catch (error) {
+    console.error("getUploadedFiles failed: ", { error });
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getUserProfile,
   uploadFile,
+  getUploadedFiles,
 };

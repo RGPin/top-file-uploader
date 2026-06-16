@@ -71,8 +71,31 @@ const saveMetadata = async (id, path, originalname, mimetype, size) => {
   }
 };
 
+/**
+ * Returns all an array of metadatas of user's uploaded files
+ * @param {string} userId
+ * @returns {Promise<Object[]>}
+ */
+const getUserFiles = async (userId) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      SELECT id, bucket_name, storage_path, original_name, mime_type, file_size, created_at, updated_at 
+      FROM uploaded_files
+      WHERE user_id = $1;
+      `,
+      [userId],
+    );
+    return rows;
+  } catch (error) {
+    console.error("getUserFiles failed: ", { error });
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
   saveMetadata,
+  getUserFiles,
 };

@@ -7,5 +7,6 @@ const router = express.Router();
 router.use(checkAuth);
 router.get("/profile", controller.getUserProfile);
 router.post("/upload", multerUpload.single("file"), controller.uploadFile);
+router.get("/userfiles", controller.getUploadedFiles);
 
 module.exports = router;
