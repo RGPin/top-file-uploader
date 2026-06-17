@@ -1,4 +1,4 @@
-const checkAuth = (req, res, next) => {
+const protectRoute = (req, res, next) => {
   if (!req.isAuthenticated() || !req.user) {
     return res.status(401).json({ message: "User not authenticated" });
   }
@@ -6,5 +6,5 @@ const checkAuth = (req, res, next) => {
 };
 
 module.exports = {
-  checkAuth,
+  protectRoute,
 };

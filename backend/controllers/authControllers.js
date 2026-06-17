@@ -84,8 +84,18 @@ const logout = (req, res, next) => {
   });
 };
 
+const checkAuth = (req, res) => {
+  try {
+    res.status(200).json(req.user ? req.user : null);
+  } catch (error) {
+    console.error("checkAuth failed: ", { error });
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   signup,
   login,
   logout,
+  checkAuth,
 };

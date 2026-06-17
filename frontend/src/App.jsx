@@ -1,24 +1,60 @@
 import { useState } from "react";
 import "./App.css";
 import { useEffect } from "react";
+import { Route, Routes, Navigate } from "react-router";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
+import Files from "./pages/Files";
+import Header from "./components/Header";
 
 function App() {
-  async function testFetch() {
-    try {
-      const reponse = await fetch("/api/user/profile");
-      if (!response.ok) throw new Error(response.statusText);
+  const [user, setUser] = useState(null);
 
-      const data = await response.json();
+  async function fetchUser(signal) {
+    try {
+      const res = await fetch("/api/auth/check", { signal });
+      if (!res.ok) throw new Error(res.statusText);
+      const data = await res.json();
       console.log(data);
+      setUser(data);
     } catch (error) {
-      console.error(error.response.data.message);
+      if (error.name !== "AbortError") {
+        console.error("fetchUser failed: ", { error });
+      }
     }
   }
 
   useEffect(() => {
-    testFetch();
+    const controller = new AbortController();
+    const { signal } = controller;
+    fetchUser(signal);
+    () => controller.abort();
   }, []);
-  return <h1>Haru warudo</h1>;
+
+  return (
+    <div className="App">
+      <Header />
+      <Routes>
+        <Route
+          path="/login"
+          element={!user ? <Login /> : <Navigate to="/" />}
+        ></Route>
+        <Route
+          path="/signup"
+          element={!user ? <SignUp /> : <Navigate to="/" />}
+        ></Route>
+        <Route
+          path="/profile"
+          element={user ? <Profile /> : <Navigate to="/login" />}
+        ></Route>
+        <Route
+          path="/"
+          element={user ? <Files /> : <Navigate to="/login" />}
+        ></Route>
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
