@@ -1,3 +1,7 @@
 export default function Header() {
-  return <h1>Header</h1>;
+  return (
+    <div className="header">
+      <h1>STORAGEAPP</h1>
+    </div>
+  );
 }
