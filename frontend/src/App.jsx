@@ -10,7 +10,7 @@ import Header from "./components/Header";
 import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
-  const { user, isFetchingUser, fetchUser } = useAuthStore();
+  const { user, isFetchingUser, fetchUser, isLoggingIn } = useAuthStore();
 
   useEffect(() => {
     const controller = new AbortController();

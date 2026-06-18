@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function Login() {
+  const { handleLogin, isLoggingIn, user } = useAuthStore();
   const [formInput, setFormInput] = useState({ email: "", password: "" });
+  const navigate = useNavigate();
 
   function handleFormInput(e) {
     const { name, value } = e.target;
@@ -12,11 +15,23 @@ export default function Login() {
     }));
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!formInput.email || !formInput.password) return;
+    handleLogin(formInput, () => {
+      navigate("/");
+    });
+  }
+
+  if (isLoggingIn) {
+    return <div className="loading">Checking credentials...</div>;
+  }
+
   return (
     <div className="login">
       <div className="container">
         <h2>Sign in to your account</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-field">
             <label htmlFor="email">Email</label>
             <input

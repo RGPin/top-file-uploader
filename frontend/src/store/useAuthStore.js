@@ -3,21 +3,53 @@ import { create } from "zustand";
 export const useAuthStore = create((set) => ({
   user: null,
   isFetchingUser: true,
+  isLoggingIn: false,
 
   fetchUser: async (signal) => {
+    console.log("fetchUser running");
     try {
       set({ isFetchingUser: true });
       const res = await fetch("/api/auth/check", { signal });
       if (!res.ok) throw new Error(res.statusText);
       const data = await res.json();
-      set({ user: data });
+      set({ user: data.user });
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("fetchUser failed: ", { error });
         set({ user: null });
       }
     } finally {
-      set({ isFetchingUser: false });
+      if (!signal?.aborted) {
+        set({ isFetchingUser: false });
+      }
+    }
+  },
+
+  handleLogin: async (formData, navigateOnSuccess) => {
+    set({ isLoggingIn: true });
+    console.log("handleLogin running");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        throw new Error(data.message || "Login failed");
+      }
+
+      const data = await res.json();
+      set({ user: data.user });
+
+      if (navigateOnSuccess) navigateOnSuccess();
+    } catch (error) {
+      console.error("handleLogin failed: ", { error });
+      set({ user: null });
+    } finally {
+      set({ isLoggingIn: false });
     }
   },
 }));
