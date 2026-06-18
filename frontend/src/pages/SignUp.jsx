@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 export default function SignUp() {
   const [formInput, setFormInput] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -22,12 +22,12 @@ export default function SignUp() {
         <h2>Create an account</h2>
         <form>
           <div className="form-field">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="username">Name</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formInput.name}
+              id="username"
+              name="username"
+              value={formInput.username}
               onChange={handleFormInput}
             />
           </div>
