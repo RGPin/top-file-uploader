@@ -18,8 +18,26 @@
   --text-lg: 1.5rem;    /* 24px - H2 / Section titles */
   --text-xl: 2.25rem;   /* 36px - H1 / Page titles */
   
+  --radius-xs: 12px;
   --radius-sm: 18px;
   --radius-md: 24px;
+}
+
+button, 
+input[type="button"], 
+input[type="submit"], 
+input[type="reset"] {
+  background: transparent;
+  color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 body {
@@ -30,4 +48,54 @@ body {
   border: 3px solid black;
   border-radius: var(--radius-sm);
   padding: var(--space-xs) var(--space-md);
+}
+
+.signup, .login {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--text-lg);
+
+  h2 {
+    padding: 0;
+    margin: 0;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    width: 500px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  input {
+    font-family: "Excalifont", sans-serif;
+    font-size: var(--text-md);
+  }
+
+  button {
+    border: 2px solid black;
+    border-radius: var(--radius-xs);
+    margin-top: var(--space-xs);
+  }
+
+  button:focus-visible {
+    outline: 1px solid black;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  p {
+    margin: 0 auto;
+  }
 }

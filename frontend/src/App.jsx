@@ -10,9 +10,11 @@ import Header from "./components/Header";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   async function fetchUser(signal) {
     try {
+      setLoading(true);
       const res = await fetch("/api/auth/check", { signal });
       if (!res.ok) throw new Error(res.statusText);
       const data = await res.json();
@@ -22,6 +24,8 @@ function App() {
       if (error.name !== "AbortError") {
         console.error("fetchUser failed: ", { error });
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -29,8 +33,12 @@ function App() {
     const controller = new AbortController();
     const { signal } = controller;
     fetchUser(signal);
-    () => controller.abort();
+    return () => controller.abort();
   }, []);
+
+  if (loading) {
+    return <div className="loading">Loading your workspace...</div>;
+  }
 
   return (
     <div className="App">
