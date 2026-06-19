@@ -1,3 +1,9 @@
+import FilesList from "../components/FilesList";
+
 export default function Files() {
-  return <h1>Files</h1>;
+  return (
+    <div className="files">
+      <FilesList />
+    </div>
+  );
 }

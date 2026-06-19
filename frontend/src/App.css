@@ -43,6 +43,16 @@ input[type="reset"] {
   appearance: none;
 }
 
+a {
+  all: unset;
+  cursor: pointer;
+}
+
+p{
+  padding: 0;
+  margin: 0;
+}
+
 body {
   font-family: "Excalifont", sans-serif;
   color: var(--main-color);
@@ -134,11 +144,6 @@ body {
     margin: 0;
     text-align: center;
   }
-
-  p {
-    padding: 0;
-    margin: 0;
-  }
   
   .container {
     display: flex;
@@ -172,5 +177,42 @@ body {
 
   button:focus-visible {
     outline: 1px solid red;
+  }
+}
+
+.files-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--text-md);
+  width: 70%;
+  margin: var(--space-xs);
+  border: 3px solid var(--main-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    flex: 1;
+  }
+
+  .label-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-left: var(--space-sm);
+  }
+
+  .file-item {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 2px solid var(--main-color);
+    border-radius: var(--radius-xs);
+    padding: var(--space-md);
+  }
+
+  .actions {
+    padding: var(--space-sm);
   }
 }
