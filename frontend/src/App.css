@@ -62,9 +62,13 @@ body {
     font-size: var(--text-lg);
   }
 
-  .actions .link {
+  .link {
     text-decoration: none;
     color: var(--main-color);
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--main-color);
   }
 }
 
@@ -115,5 +119,58 @@ body {
 
   p {
     margin: 0 auto;
+  }
+}
+
+.profile {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--text-lg);
+
+  h2 {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding: var(--space-lg);
+    width: 500px;
+    border: 3px solid var(--main-color);
+    border-radius: var(--radius-md);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .detail {
+    border: 2px solid var(--main-color);
+    border-radius: var(--radius-xs);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  button {
+    border: 2px solid red;
+    border-radius: var(--radius-xs);
+    padding: var(--space-xs);
+    color: red;
+  }
+
+  button:focus-visible {
+    outline: 1px solid red;
   }
 }

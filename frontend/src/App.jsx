@@ -29,19 +29,19 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={!user ? <Login /> : <Navigate to="/" />}
+          element={!user ? <Login /> : <Navigate to="/" replace />}
         ></Route>
         <Route
           path="/signup"
-          element={!user ? <SignUp /> : <Navigate to="/" />}
+          element={!user ? <SignUp /> : <Navigate to="/" replace />}
         ></Route>
         <Route
           path="/profile"
-          element={user ? <Profile /> : <Navigate to="/login" />}
+          element={user ? <Profile /> : <Navigate to="/login" replace />}
         ></Route>
         <Route
           path="/"
-          element={user ? <Files /> : <Navigate to="/login" />}
+          element={user ? <Files /> : <Navigate to="/login" replace />}
         ></Route>
       </Routes>
     </div>
