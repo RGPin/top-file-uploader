@@ -21,6 +21,9 @@
   --radius-xs: 12px;
   --radius-sm: 18px;
   --radius-md: 24px;
+
+  --main-color: black;
+  --secondary-color: white;
 }
 
 button, 
@@ -42,12 +45,27 @@ input[type="reset"] {
 
 body {
   font-family: "Excalifont", sans-serif;
+  color: var(--main-color);
 }
 
 .header {
-  border: 3px solid black;
+  border: 3px solid var(--main-color);
   border-radius: var(--radius-sm);
-  padding: var(--space-xs) var(--space-md);
+  padding: var(--space-xs) var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .actions {
+    display: flex;
+    gap: var(--space-md);
+    font-size: var(--text-lg);
+  }
+
+  .actions .link {
+    text-decoration: none;
+    color: var(--main-color);
+  }
 }
 
 .signup, .login {
@@ -81,13 +99,13 @@ body {
   }
 
   button {
-    border: 2px solid black;
+    border: 2px solid var(--main-color);
     border-radius: var(--radius-xs);
     margin-top: var(--space-xs);
   }
 
   button:focus-visible {
-    outline: 1px solid black;
+    outline: 1px solid var(--main-color);
   }
 
   .form-field {
