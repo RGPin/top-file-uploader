@@ -5,6 +5,7 @@ export const useAuthStore = create((set) => ({
   isFetchingUser: true,
   isLoggingIn: false,
   isLoggingOut: false,
+  isSigningUp: false,
 
   fetchUser: async (signal) => {
     console.log("fetchUser running");
@@ -72,6 +73,29 @@ export const useAuthStore = create((set) => ({
       console.error("handleLogOut failed: ", { error });
     } finally {
       set({ isLoggingOut: false });
+    }
+  },
+
+  handleSignUp: async (formData, navigateOnSuccess) => {
+    set({ isSigningUp: true });
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.message || "Sign up failed");
+      }
+
+      if (navigateOnSuccess) navigateOnSuccess();
+    } catch (error) {
+      console.error("handleSignUp failed: ", { error });
+    } finally {
+      set({ isSigningUp: false });
     }
   },
 }));

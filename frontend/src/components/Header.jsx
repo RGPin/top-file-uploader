@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <div className="header">
       <h1>STORAGEAPP</h1>
-      {user && (
+      {user ? (
         <div className="actions">
           <Link to="/profile" className="link">
             Profile
@@ -15,6 +15,15 @@ export default function Header() {
             Files
           </Link>
           <button onClick={handleLogOut}>Log Out</button>
+        </div>
+      ) : (
+        <div className="actions">
+          <Link to="/login" className="link">
+            Login
+          </Link>
+          <Link to="/signup" className="link">
+            Sign Up
+          </Link>
         </div>
       )}
     </div>

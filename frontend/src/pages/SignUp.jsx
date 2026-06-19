@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuthStore } from "../store/useAuthStore";
 
 export default function SignUp() {
+  const { handleSignUp } = useAuthStore();
+  const navigate = useNavigate();
   const [formInput, setFormInput] = useState({
     username: "",
     email: "",
@@ -16,11 +19,19 @@ export default function SignUp() {
     }));
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!formInput.email || !formInput.password || !formInput.username) return;
+    handleSignUp(formInput, () => {
+      navigate("/login");
+    });
+  }
+
   return (
     <div className="signup">
       <div className="container">
         <h2>Create an account</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-field">
             <label htmlFor="username">Name</label>
             <input
