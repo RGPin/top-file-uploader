@@ -212,7 +212,28 @@ body {
     padding: var(--space-md);
   }
 
+  .file-name {
+    width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .file-wrapper-link {
+    border-radius: var(--radius-xs);
+  }
+
   .actions {
     padding: var(--space-sm);
+  }
+
+  button {
+    border: 2px solid var(--main-color);
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-xs);
+  }
+
+  button:focus-visible, .file-wrapper-link:focus-visible {
+    outline: 1px solid var(--main-color);
   }
 }

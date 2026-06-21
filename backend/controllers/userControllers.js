@@ -26,7 +26,7 @@ const uploadFile = async (req, res) => {
 
     if (error) throw error;
 
-    const uploaded = db.saveMetadata(
+    const uploaded = await db.saveMetadata(
       req.user.id,
       data.path,
       req.file.originalname,
@@ -40,9 +40,8 @@ const uploadFile = async (req, res) => {
     }
 
     res.status(200).json({
-      fileName: req.file.originalname,
-      message: "File uploaded",
-      data: data,
+      message: "success",
+      uploaded,
     });
   } catch (error) {
     console.error("uploadFile failed: ", { error });

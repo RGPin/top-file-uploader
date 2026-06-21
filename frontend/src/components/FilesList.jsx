@@ -1,8 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFilesStore } from "../store/useFilesStore";
 
 export default function FilesList() {
-  const { fetchUserFiles, userFiles, isFetchingFiles } = useFilesStore();
+  const {
+    fetchUserFiles,
+    userFiles,
+    isFetchingFiles,
+    uploadFile,
+    isUploadingFiles,
+  } = useFilesStore();
+  const fileInputRef = useRef(null);
+  const formRef = useRef(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const file = fileInputRef.current?.files?.[0];
+    if (!file) return;
+    uploadFile(file);
+  }
+
+  function handleFileInput(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    formRef.current?.requestSubmit();
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -19,7 +40,17 @@ export default function FilesList() {
     <div className="files-list">
       <div className="container">
         <div className="actions">
-          <button>Upload File</button>
+          <form ref={formRef} onSubmit={handleSubmit}>
+            <button type="button" onClick={() => fileInputRef.current?.click()}>
+              {isUploadingFiles ? "Uploading file..." : "Upload File"}
+            </button>
+            <input
+              type="file"
+              style={{ display: "none" }}
+              ref={fileInputRef}
+              onChange={handleFileInput}
+            />
+          </form>
         </div>
         <div className="label-container">
           <p className="label">File Type</p>

@@ -60,7 +60,7 @@ const saveMetadata = async (id, path, originalname, mimetype, size) => {
       `
       INSERT INTO uploaded_files (user_id, storage_path, original_name, mime_type, file_size)
       VALUES ($1, $2, $3, $4, $5)
-      RETURNING *;
+      RETURNING id, bucket_name, storage_path, original_name, mime_type, file_size, created_at, updated_at;
       `,
       [id, path, originalname, mimetype, size],
     );
