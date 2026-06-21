@@ -204,12 +204,30 @@ body {
     padding-left: var(--space-sm);
   }
 
-  .file-item {
+  .file-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
+    align-items: center;
     border: 2px solid var(--main-color);
     border-radius: var(--radius-xs);
     padding: var(--space-md);
+  }
+
+  .file-item {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+  }
+
+  .delete-btn {
+    grid-row: 1;
+    grid-column: 3;
+    justify-self: flex-end;
+  }
+
+  .file-item.deleting {
+    border-color: gray;
+    color: gray;
   }
 
   .file-name {
@@ -227,13 +245,23 @@ body {
     padding: var(--space-sm);
   }
 
-  button {
+  .upload-btn {
     border: 2px solid var(--main-color);
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--radius-xs);
   }
 
-  button:focus-visible, .file-wrapper-link:focus-visible {
+  .delete-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .upload-btn:focus-visible, .file-wrapper-link:focus-visible, .delete-btn:focus-visible {
     outline: 1px solid var(--main-color);
+  }
+
+  button:disabled {
+    color: gray;
+    border-color: gray;
   }
 }

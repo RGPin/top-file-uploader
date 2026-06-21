@@ -77,8 +77,43 @@ const getUploadedFiles = async (req, res) => {
   }
 };
 
+const deleteFile = async (req, res) => {
+  try {
+    const fileId = req.body.fileId;
+    const filePath = req.body.filePath;
+
+    if (!fileId && filePath) {
+      return res
+        .status(400)
+        .json({ message: "Failed to delete file. No id or path provided" });
+    }
+
+    const deleted = await db.deleteFileFromDb(fileId);
+
+    const { data, error } = await supabase.storage
+      .from("uploads")
+      .remove([filePath]);
+
+    if (error) throw error;
+
+    if (!deleted) {
+      console.error("deleteFileFromDb failed");
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+    res.status(200).json({
+      message: "success",
+      deleted,
+    });
+  } catch (error) {
+    console.error("deleteFile failed: ", { error });
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getUserProfile,
   uploadFile,
   getUploadedFiles,
+  deleteFile,
 };

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useFilesStore } from "../store/useFilesStore";
+import Delete from "./icons/Delete";
 
 export default function FilesList() {
   const {
@@ -8,18 +9,28 @@ export default function FilesList() {
     isFetchingFiles,
     uploadFile,
     isUploadingFiles,
+    deleteFile,
+    isDeletingFile,
   } = useFilesStore();
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (isUploadingFiles) return;
+
     const file = fileInputRef.current?.files?.[0];
     if (!file) return;
+
+    fileInputRef.current.value = "";
+
     uploadFile(file);
   }
 
   function handleFileInput(e) {
+    if (isUploadingFiles) return;
+
     const file = e.target.files?.[0];
     if (!file) return;
     formRef.current?.requestSubmit();
@@ -41,7 +52,12 @@ export default function FilesList() {
       <div className="container">
         <div className="actions">
           <form ref={formRef} onSubmit={handleSubmit}>
-            <button type="button" onClick={() => fileInputRef.current?.click()}>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="upload-btn"
+              disabled={isUploadingFiles}
+            >
               {isUploadingFiles ? "Uploading file..." : "Upload File"}
             </button>
             <input
@@ -58,20 +74,26 @@ export default function FilesList() {
           <p className="label">Created At</p>
         </div>
         {userFiles?.map((file) => (
-          <a
-            className="file-wrapper-link"
-            key={file.id}
-            target="_blank"
-            href={file.url}
-          >
-            <div className="file-item">
-              <p className="file-type">{file.mime_type}</p>
-              <p className="file-name">{file.original_name}</p>
-              <p className="file-created-at">
-                {new Date(file.created_at).toLocaleDateString()}
-              </p>
-            </div>
-          </a>
+          <div className="file-container" key={file.id}>
+            <a className="file-wrapper-link" target="_blank" href={file.url}>
+              <div
+                className={isDeletingFile ? "file-item deleting" : "file-item"}
+              >
+                <p className="file-type">{file.mime_type}</p>
+                <p className="file-name">{file.original_name}</p>
+                <p className="file-created-at">
+                  {new Date(file.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </a>
+            <button
+              className="delete-btn"
+              onClick={() => deleteFile(file.id, file.storage_path)}
+              disabled={isDeletingFile}
+            >
+              <Delete className="delete-icon" />
+            </button>
+          </div>
         ))}
       </div>
     </div>

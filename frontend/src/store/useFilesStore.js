@@ -4,6 +4,7 @@ export const useFilesStore = create((set, get) => ({
   userFiles: null,
   isFetchingFiles: true,
   isUploadingFiles: false,
+  isDeletingFile: false,
 
   fetchUserFiles: async (signal) => {
     try {
@@ -49,6 +50,33 @@ export const useFilesStore = create((set, get) => ({
       console.error("uploadFile failed: ", { error });
     } finally {
       set({ isUploadingFiles: false });
+    }
+  },
+
+  deleteFile: async (fileId, filePath) => {
+    set({ isDeletingFile: true });
+    try {
+      const res = await fetch("/api/user/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ fileId, filePath }),
+      });
+
+      if (!res.ok) throw new Error(res.statusText);
+
+      const data = await res.json();
+
+      if (!data?.deleted) throw new Error("Failed to delete");
+
+      set((state) => ({
+        userFiles: state.userFiles.filter((file) => file.id !== fileId),
+      }));
+    } catch (error) {
+      console.error("deleteFile failed: ", { error });
+    } finally {
+      set({ isDeletingFile: false });
     }
   },
 }));

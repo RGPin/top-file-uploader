@@ -93,9 +93,27 @@ const getUserFiles = async (userId) => {
   }
 };
 
+const deleteFileFromDb = async (fileId) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      DELETE FROM uploaded_files
+      WHERE id = $1
+      RETURNING id, bucket_name, storage_path, original_name, mime_type, file_size, created_at, updated_at;
+      `,
+      [fileId],
+    );
+    return rows[0] || null;
+  } catch (error) {
+    console.error("deleteFileFromDb failed: ", { error });
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
   saveMetadata,
   getUserFiles,
+  deleteFileFromDb,
 };
