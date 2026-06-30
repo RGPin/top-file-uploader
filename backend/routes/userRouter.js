@@ -9,5 +9,6 @@ router.get("/profile", controller.getUserProfile);
 router.post("/upload", multerUpload.single("file"), controller.uploadFile);
 router.get("/userfiles", controller.getUploadedFiles);
 router.delete("/delete", controller.deleteFile);
+router.get("/files/:folder", controller.getFilesFromFolder);
 
 module.exports = router;

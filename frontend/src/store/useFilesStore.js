@@ -80,3 +80,11 @@ export const useFilesStore = create((set, get) => ({
     }
   },
 }));
+
+// Add folder requirements:
+// db must include folder name in schema
+// able to retrieve files from specific folder only
+// upload file must include folder name
+// upload file must receive which folder to upload to
+// files list must display files from specific folders only
+// there is a default folder

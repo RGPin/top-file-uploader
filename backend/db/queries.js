@@ -54,15 +54,22 @@ const createUser = async (username, email, hashedPassword) => {
  * @param {number} size
  * @returns {Promise<Object|null>}
  */
-const saveMetadata = async (id, path, originalname, mimetype, size) => {
+const saveMetadata = async (
+  id,
+  folderName,
+  path,
+  originalname,
+  mimetype,
+  size,
+) => {
   try {
     const { rows } = await pool.query(
       `
-      INSERT INTO uploaded_files (user_id, storage_path, original_name, mime_type, file_size)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, bucket_name, storage_path, original_name, mime_type, file_size, created_at, updated_at;
+      INSERT INTO uploaded_files (user_id, folder_name, storage_path, original_name, mime_type, file_size)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id, bucket_name, folder_name, storage_path, original_name, mime_type, file_size, created_at, updated_at;
       `,
-      [id, path, originalname, mimetype, size],
+      [id, folderName, path, originalname, mimetype, size],
     );
     return rows[0] || null;
   } catch (error) {
@@ -93,6 +100,34 @@ const getUserFiles = async (userId) => {
   }
 };
 
+/**
+ * Returns all an array of metadatas of user's uploaded files from a specific folder
+ * @param {string} userId
+ * @param {string} folderName
+ * @returns {Promise<Object[]>}
+ */
+const getFilesByFolderFromDb = async (userId, folderName) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      SELECT id, bucket_name, folder_name, storage_path, original_name, mime_type, file_size, created_at, updated_at
+      FROM uploaded_files
+      WHERE user_id = $1 AND folder_name = $2
+      `,
+      [userId, folderName],
+    );
+    return rows;
+  } catch (error) {
+    console.error("getFilesByFolderFromDb failed: ", { error });
+    throw error;
+  }
+};
+
+/**
+ * Delete file from database, returns deleted row
+ * @param {string} fileId
+ * @returns {Promise<Object>}
+ */
 const deleteFileFromDb = async (fileId) => {
   try {
     const { rows } = await pool.query(
@@ -116,4 +151,5 @@ module.exports = {
   saveMetadata,
   getUserFiles,
   deleteFileFromDb,
+  getFilesByFolderFromDb,
 };

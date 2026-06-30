@@ -15,6 +15,7 @@ CREATE TABLE uploaded_files (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   bucket_name VARCHAR(255) NOT NULL DEFAULT 'uploads',
+  folder_name VARCHAR(255) NOT NULL DEFAULT 'default',
   storage_path TEXT NOT NULL,
   original_name TEXT NOT NULL,
   mime_type VARCHAR(255),
@@ -24,7 +25,7 @@ CREATE TABLE uploaded_files (
   UNIQUE (bucket_name, storage_path)
 );
 
-CREATE INDEX idx_uploaded_files_user_id ON uploaded_files(user_id);
+CREATE INDEX idx_uploaded_files_user_folder ON uploaded_files (user_id, folder_name);
 
 CREATE OR REPLACE FUNCTION update_updated_at()
 RETURNS TRIGGER AS $$
