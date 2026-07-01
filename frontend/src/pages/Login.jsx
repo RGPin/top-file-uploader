@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
     if (!formInput.email || !formInput.password) return;
     handleLogin(formInput, () => {
-      navigate("/");
+      navigate("/files/default");
     });
   }
 

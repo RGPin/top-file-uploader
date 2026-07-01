@@ -29,20 +29,23 @@ function App() {
       <Routes>
         <Route
           path="/login"
-          element={!user ? <Login /> : <Navigate to="/" replace />}
-        ></Route>
+          element={!user ? <Login /> : <Navigate to="/files/default" replace />}
+        />
         <Route
           path="/signup"
-          element={!user ? <SignUp /> : <Navigate to="/" replace />}
-        ></Route>
+          element={
+            !user ? <SignUp /> : <Navigate to="/files/default" replace />
+          }
+        />
         <Route
           path="/profile"
           element={user ? <Profile /> : <Navigate to="/login" replace />}
-        ></Route>
+        />
         <Route
-          path="/"
+          path="/files/:folderName"
           element={user ? <Files /> : <Navigate to="/login" replace />}
-        ></Route>
+        />
+        <Route path="*" element={<Navigate to="/files/default" replace />} />
       </Routes>
     </div>
   );

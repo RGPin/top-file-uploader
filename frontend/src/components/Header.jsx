@@ -11,7 +11,7 @@ export default function Header() {
           <Link to="/profile" className="link">
             Profile
           </Link>
-          <Link to="/" className="link">
+          <Link to="/files/default" className="link">
             Files
           </Link>
           <button onClick={handleLogOut}>Log Out</button>

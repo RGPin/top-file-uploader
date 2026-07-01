@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useFilesStore } from "../store/useFilesStore";
 import Delete from "./icons/Delete";
+import { useParams } from "react-router";
 
 export default function FilesList() {
   const {
@@ -15,6 +16,8 @@ export default function FilesList() {
   const fileInputRef = useRef(null);
   const formRef = useRef(null);
 
+  const { folderName } = useParams();
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -25,7 +28,7 @@ export default function FilesList() {
 
     fileInputRef.current.value = "";
 
-    uploadFile(file);
+    uploadFile(file, folderName);
   }
 
   function handleFileInput(e) {
@@ -39,9 +42,9 @@ export default function FilesList() {
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
-    fetchUserFiles(signal);
+    fetchUserFiles(folderName, signal);
     return () => controller.abort();
-  }, [fetchUserFiles]);
+  }, [fetchUserFiles, folderName]);
 
   if (isFetchingFiles) {
     return <div className="loading">Fetching files...</div>;
@@ -73,6 +76,7 @@ export default function FilesList() {
           <p className="label">Name</p>
           <p className="label">Created At</p>
         </div>
+        {!userFiles?.length && <p>Folder is empty. Upload a file</p>}
         {userFiles?.map((file) => (
           <div className="file-container" key={file.id}>
             <a className="file-wrapper-link" target="_blank" href={file.url}>
