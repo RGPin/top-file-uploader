@@ -183,10 +183,34 @@ const deleteFile = async (req, res) => {
   }
 };
 
+const getAllFolders = async (req, res) => {
+  try {
+    const folders = await db.getFoldersFromDb(req.user.id);
+
+    if (!folders || folders.length === 0) {
+      return res.status(200).json({
+        message: "success",
+        userFolders: [],
+      });
+    }
+
+    const userFolders = folders.map((row) => row.folder_name);
+
+    res.status(200).json({
+      message: "success",
+      userFolders,
+    });
+  } catch (error) {
+    console.error("getAllFolders failed: ", { error });
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getUserProfile,
   uploadFile,
   getUploadedFiles,
   deleteFile,
   getFilesFromFolder,
+  getAllFolders,
 };

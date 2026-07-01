@@ -2,9 +2,30 @@ import { create } from "zustand";
 
 export const useFilesStore = create((set, get) => ({
   userFiles: null,
+  userFolders: null,
   isFetchingFiles: true,
+  isFetchingFolders: true,
   isUploadingFiles: false,
   isDeletingFile: false,
+
+  fetchUserFolders: async (signal) => {
+    try {
+      const res = await fetch("/api/user/userfolders", { signal });
+      if (!res.ok) throw new Error(res.statusText);
+      const data = await res.json();
+      console.log(data);
+      set({ userFolders: data.userFolders });
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("fetchUserFolders failed: ", { error });
+        set({ userFolders: null });
+      }
+    } finally {
+      if (!signal?.aborted) {
+        set({ isFetchingFolders: false });
+      }
+    }
+  },
 
   // fetchUserFiles: async (signal) => {
   //   try {

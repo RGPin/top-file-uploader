@@ -8,6 +8,7 @@ router.use(protectRoute);
 router.get("/profile", controller.getUserProfile);
 router.post("/upload", multerUpload.single("file"), controller.uploadFile);
 router.get("/userfiles", controller.getUploadedFiles);
+router.get("/userfolders", controller.getAllFolders);
 router.delete("/delete", controller.deleteFile);
 router.get("/files/:folder", controller.getFilesFromFolder);
 

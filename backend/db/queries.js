@@ -145,6 +145,27 @@ const deleteFileFromDb = async (fileId) => {
   }
 };
 
+/**
+ * Returns all folders
+ * @param {string} userId
+ * @returns {Promise<Object[]>}
+ */
+const getFoldersFromDb = async (userId) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      SELECT folder_name FROM uploaded_files
+      WHERE user_id = $1;
+      `,
+      [userId],
+    );
+    return rows;
+  } catch (error) {
+    console.error("getFoldersFromDb failed: ", { error });
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
@@ -152,4 +173,5 @@ module.exports = {
   getUserFiles,
   deleteFileFromDb,
   getFilesByFolderFromDb,
+  getFoldersFromDb,
 };
